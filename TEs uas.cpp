@@ -248,20 +248,20 @@ void keyboard(unsigned char key, int x, int y) {
         case 'd':
             angleY += 5.0; // ROTASI KE KANAN
             break;
-        case 'h': // Menampilkan atau menyembunyikan garis kartesius
+        case 'h': 
             hidden = !hidden;
             break;
-        case '+': // Zoom in
+        case '+': 
             scale += 0.1;
             break;
-        case 'w' :
-			yPos += 0.1;
-			break;
-		case 's' :
-			yPos -= 0.1;
-			break;
-        case '-': // Zoom out
-            if (scale > 0.1) scale -= 0.1; // Hindari skala negatif
+        case 'w' : 
+            yPos += 0.1;
+            break;
+        case 's' :
+            yPos -= 0.1;
+            break;
+        case '-': 
+            scale -= 0.1;
             break;
     }
     glutPostRedisplay(); 
