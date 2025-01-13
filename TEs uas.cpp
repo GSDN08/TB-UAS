@@ -5,7 +5,7 @@
 float rotX = 0.0;
 float rotY = 0.0;
 float scale = 1.0; 
-float lightPos[] = {0.0, 1.0, 0.0, 1.0};
+float lightPos[] = {10.0, 10.0, 0.0, 1.0};
 bool hidden = false;
 float xPos = 0.0;
 float yPos = 0.0;
@@ -125,7 +125,7 @@ void drawCandle(float x, float y, float z) {
 
     glColor3ub(255, 165, 0);  
     glPushMatrix();
-   	glTranslatef(0.0, 0.5, 0.0); 
+        glTranslatef(0.0, 0.5, 0.0); 
         
         // API
     glBegin(GL_TRIANGLES);
@@ -186,6 +186,26 @@ void drawPlate(float x, float y, float z, float radius) {
     glPopMatrix();
 }
 
+void tutup() {
+    GLUquadric* quadric = gluNewQuadric(); // Membuat objek quadric
+    
+    glPushMatrix(); // Simpan transformasi matriks saat ini
+
+    glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+    glTranslatef(0.0f, 0.0f, 0.0f); // Memindahkan posisi silinder (opsional)
+    glRotatef(-90.0f, 1.0f, 0.0f, 0.0f); // Merotasi silinder agar tegak (opsional
+    gluCylinder(quadric, 4.0, 2.0, 4.0, 50, 1); // Silinder dengan radius 5.0, tinggi 0.1, dan detail 50 segmen
+
+	// Disk atas
+    glPushMatrix();
+    glTranslatef(0.0, 0.0, 4.0); 
+    gluDisk(quadric, 0.0, 2.0, 50, 1); // Disk atas
+    glPopMatrix();
+    
+    glPopMatrix(); // Mengembalikan transformasi matriks awal
+    gluDeleteQuadric(quadric); // Menghapus objek quadric untuk mencegah kebocoran memori
+}
+
 void kaki(float x, float y, float z, float radius, float height, float r, float g, float b) {
     glPushMatrix();
     glTranslatef(x, y, z);
@@ -220,16 +240,16 @@ void display() {
     glRotatef(xPos, 1, 0, 0);
     glRotatef(zPos, 0, 0, 1);
 
-    if (hidden) {
-        drawCartesius();
-    }
-
     glPushMatrix();
     glRotatef(rotX, 1.0, 0.0, 0.0); 
     glRotatef(rotY, 0.0, 1.0, 0.0); 
-    glTranslatef(0.0f, yPos, 0.0f);
+    
     glScalef(scale, scale, scale);
 
+	 if (hidden) {
+        drawCartesius();
+    }
+	
     // Kue bawah
     drawCube(0.0, 0.5, 0.0, 4.0, 1.0, 4.0, 1.0, 0.5, 0.5); 
     // KUE TENGAH
@@ -246,8 +266,8 @@ void display() {
     drawCandle( 0.0, 3.0, -0.5); // Lilin tengah
     drawCandle( 0.7, 3.0, -0.5); // Lilin kanan
 
-    //HIASAN TINGKAT 3
-    //PART1
+	//HIASAN TINGKAT 3
+	//PART1
     //DEPAN
     glPushMatrix();
     glTranslatef(3.0, 3.0, 1.0);
@@ -269,8 +289,8 @@ void display() {
     glColor3f(0.5, 0.3, 0.1); // Warna kaki
     kaki(0.0, 2.0, 0.0, 0.1, 2.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
     glPopMatrix();
-    //KIRI
-    glPushMatrix();
+	//KIRI
+	glPushMatrix();
     glTranslatef(-1.0, 3.0, -3.0);
     glRotatef(90.0, 1.0, 0.0, 0.0); // Rotasi kaki agar vertikal (opsional)
     glColor3f(0.5, 0.3, 0.1); // Warna kaki
@@ -330,8 +350,8 @@ void display() {
     glColor3f(0.5, 0.3, 0.1); // Warna kaki
     kaki(0.0, 2.0, 0.0, 0.1, 3.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
     glPopMatrix();
-    //KIRI
-    glPushMatrix();
+	//KIRI
+	glPushMatrix();
     glTranslatef(-1.5, 2.0, -3.5);
     glRotatef(90.0, 1.0, 0.0, 0.0); // Rotasi kaki agar vertikal (opsional)
     glColor3f(0.5, 0.3, 0.1); // Warna kaki
@@ -360,8 +380,8 @@ void display() {
     glColor3f(0.5, 0.3, 0.1); // Warna kaki
     kaki(0.0, 2.0, 0.0, 0.1, 3.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
     glPopMatrix();
-    //KIRI BAWAH
-    glPushMatrix();
+	//KIRI BAWAH
+	glPushMatrix();
     glTranslatef(-1.5, 1.5, -3.5);
     glRotatef(90.0, 1.0, 0.0, 0.0); // Rotasi kaki agar vertikal (opsional)
     glColor3f(0.5, 0.3, 0.1); // Warna kaki
@@ -390,8 +410,8 @@ void display() {
     glColor3f(0.5, 0.3, 0.1); // Warna kaki
     kaki(0.0, 2.0, 0.0, 0.1, 4.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
     glPopMatrix();
-    //KIRI
-    glPushMatrix();
+	//KIRI
+	glPushMatrix();
     glTranslatef(-2.0, 1.0, -4.0);
     glRotatef(90.0, 1.0, 0.0, 0.0); // Rotasi kaki agar vertikal (opsional)
     glColor3f(0.5, 0.3, 0.1); // Warna kaki
@@ -420,8 +440,8 @@ void display() {
     glColor3f(0.5, 0.3, 0.1); // Warna kaki
     kaki(0.0, 2.0, 0.0, 0.1, 4.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
     glPopMatrix();
-    //KIRI
-    glPushMatrix();
+	//KIRI
+	glPushMatrix();
     glTranslatef(-2.0, 0.5, -4.0);
     glRotatef(90.0, 1.0, 0.0, 0.0); // Rotasi kaki agar vertikal (opsional)
     glColor3f(0.5, 0.3, 0.1); // Warna kaki
@@ -450,8 +470,8 @@ void display() {
     glColor3f(0.5, 0.3, 0.1); // Warna kaki
     kaki(0.0, 2.0, 0.0, 0.1, 4.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
     glPopMatrix();
-    //KIRI
-    glPushMatrix();
+	//KIRI
+	glPushMatrix();
     glTranslatef(-2.0, 0.0, -4.0);
     glRotatef(90.0, 1.0, 0.0, 0.0); // Rotasi kaki agar vertikal (opsional)
     glColor3f(0.5, 0.3, 0.1); // Warna kaki
@@ -461,14 +481,25 @@ void display() {
     
     glPopMatrix();
 
+	glPushMatrix();
     //PIRING
     drawPlate(0.0, -0.2, 0.0, 0.0);
-             
+    glPopMatrix();
+    
+	glPushMatrix();
     // KAKI MEJA
     kaki(-3.0, -4.2, -3.0, 0.3, 4.0, 0.5, 0.3, 0.1);
     kaki( 3.0, -4.2, -3.0, 0.3, 4.0, 0.5, 0.3, 0.1);
     kaki(-3.0, -4.2, 3.0, 0.3, 4.0, 0.5, 0.3, 0.1);
     kaki( 3.0, -4.2, 3.0, 0.3, 4.0, 0.5, 0.3, 0.1);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(0.0f, yPos, 0.0f);
+    glTranslatef(0.0, -0.1, 0.0); 
+    tutup(); 
+
+    glPopMatrix();
 	
 
     glutSwapBuffers();
@@ -497,10 +528,10 @@ void keyboard(unsigned char key, int x, int y) {
             scale += 0.1; // +++++
             break;
         case 'w' : 
-            yPos += 0.1; // TRANSLATTED ATAS
+            yPos += 10.1; // TRANSLATTED ATAS
             break;
         case 's' :
-            yPos -= 0.1; // TRANSLATED BAWAH
+            yPos -= 10.1; // TRANSLATED BAWAH
             break;
         case 'q':
             xPos = xPos + 5; //ROTASI KE ATAS
@@ -537,6 +568,8 @@ int main(int argc, char** argv) {
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(800, 600);
     glutCreateWindow("TB UAS KUE");
+    glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     init();
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
