@@ -1,19 +1,24 @@
 #include <GL/glut.h>
 #include <cmath>
 
-// Variabel untuk rotasi
+//Rotasi
 float rotX = 0.0;
 float rotY = 0.0;
+//Scale
 float scale = 1.0; 
+//Posisi Cahaya
 float lightPos[] = {10.0, 10.0, 0.0, 1.0};
+//Hidden Kartesius
 bool hidden = false;
+//Translated
 float xPos = 0.0;
 float yPos = 0.0;
 float zPos = 0.0;
-float cameraX = 0.0f, cameraY = 0.0f, cameraZ = 5.0f; // Posisi kamera
+//Camera
+float cameraX = 0.0f, cameraY = 0.0f, cameraZ = 5.0f; 
 
 void init() {
-    glClearColor(0.5, 0.7, 1.0, 1.0); // CYAN
+    glClearColor(0.5, 0.7, 1.0, 1.0); 
     glEnable(GL_DEPTH_TEST);          
     glEnable(GL_COLOR_MATERIAL);
 
