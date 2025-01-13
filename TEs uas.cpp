@@ -2,49 +2,49 @@
 #include <cmath>
 
 // Variabel untuk rotasi
-float angleX = 0.0;
-float angleY = 0.0;
-float scale = 1.0; // Faktor skala awal
-float lightPos[] = {0.0, 5.0, 5.0, 1.0};
+float rotX = 0.0;
+float rotY = 0.0;
+float scale = 1.0; 
+float lightPos[] = {0.0, 1.0, 0.0, 1.0};
 bool hidden = false;
-float yPos = 1.0;
-
+float xPos = 0.0;
+float yPos = 0.0;
+float zPos = 0.0;
+float cameraX = 0.0f, cameraY = 0.0f, cameraZ = 5.0f; // Posisi kamera
 
 void init() {
     glClearColor(0.5, 0.7, 1.0, 1.0); // CYAN
     glEnable(GL_DEPTH_TEST);          
+    glEnable(GL_COLOR_MATERIAL);
 
     //CAHAYA
-    //glEnable(GL_LIGHTING);
-    //glEnable(GL_LIGHT0);               
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);               
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 
-    //GLfloat light_position[] = { 0.0, 5.0, 5.0, 1.0 };  
-    //glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-
-    // Mengatur intensitas cahaya ambient dan diffuse
-    //GLfloat ambient_light[] = { 0.2, 0.2, 0.2, 1.0 }; 
-    //glLightfv(GL_LIGHT0, GL_AMBIENT, ambient_light);
-
-    //GLfloat diffuse_light[] = { 1.0, 0.8, 0.0, 1.0 };  
+    GLfloat ambient_light[] = { 0.3, 0.3, 0.3, 1.0 }; // Cahaya ambient
+    GLfloat diffuse_light[] = { 0.8, 0.8, 0.8, 1.0 }; // Cahaya diffuse
+    glLightfv(GL_LIGHT0, GL_AMBIENT, ambient_light);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse_light);
 
     glEnable(GL_NORMALIZE);
 }
 
 void drawCartesius()
 {
-	glLineWidth(1.0);
-	glColor3f(0.0, 0.0, 0.0);
-	glBegin(GL_LINES);
+ glLineWidth(1.0);
+ glColor3f(0.0, 0.0, 0.0);
+ glBegin(GL_LINES);
 	
-	glVertex3f(-50.0, 0.0, 0.0);
-	glVertex3f(50.0, 0.0, 0.0);
+ glVertex3f(-50.0, 0.0, 0.0);
+ glVertex3f(50.0, 0.0, 0.0);
 	
-	glVertex3f(0.0, -50.0, 0.0);
-	glVertex3f(0.0, 50.0, 0.0);
+ glVertex3f(0.0, -50.0, 0.0);
+ glVertex3f(0.0, 50.0, 0.0);
 	
-	glVertex3f(0.0, 0.0, -50.0);
-	glVertex3f(0.0, 0.0, 50.0);
-	glEnd();
+ glVertex3f(0.0, 0.0, -50.0);
+ glVertex3f(0.0, 0.0, 50.0);
+ glEnd();
 }
 
 void drawCube(float x, float y, float z, float width, float height, float depth, float r, float g, float b) {
@@ -56,18 +56,18 @@ void drawCube(float x, float y, float z, float width, float height, float depth,
     // Front face
     glBegin(GL_QUADS);
         glNormal3f(0.0, 0.0, 1.0);
-        glVertex3d(-0.5, -0.5,  0.5); // BAWAH KIRI
-        glVertex3d( 0.5, -0.5,  0.5); // BAWAH KANAN
-        glVertex3d( 0.5,  0.5,  0.5); // ATAS KANAN
-        glVertex3d(-0.5,  0.5,  0.5); // ATAS KIRI
+        glVertex3d(-0.5, -0.5, 0.5); // BAWAH KIRI
+        glVertex3d( 0.5, -0.5, 0.5); // BAWAH KANAN
+        glVertex3d( 0.5, 0.5, 0.5); // ATAS KANAN
+        glVertex3d(-0.5, 0.5, 0.5); // ATAS KIRI
     glEnd();
 
     // Back face
     glBegin(GL_QUADS);
         glNormal3f(0.0, 0.0, -1.0);
         glVertex3d(-0.5, -0.5, -0.5); // BAWAH KIRI
-        glVertex3d(-0.5,  0.5, -0.5); // ATAS KIRI
-        glVertex3d( 0.5,  0.5, -0.5); // ATAS KANAN
+        glVertex3d(-0.5, 0.5, -0.5); // ATAS KIRI
+        glVertex3d( 0.5, 0.5, -0.5); // ATAS KANAN
         glVertex3d( 0.5, -0.5, -0.5); // BAWAH KANAN
     glEnd();
 
@@ -75,35 +75,35 @@ void drawCube(float x, float y, float z, float width, float height, float depth,
     glBegin(GL_QUADS);
         glNormal3f(-1.0, 0.0, 0.0);
         glVertex3d(-0.5, -0.5, -0.5); // BAWAH DEPAN
-        glVertex3d(-0.5, -0.5,  0.5); // BAWAH BELAKANG
-        glVertex3d(-0.5,  0.5,  0.5); // ATAS BELAKANG
-        glVertex3d(-0.5,  0.5, -0.5); // ATAS DEPAN
+        glVertex3d(-0.5, -0.5, 0.5); // BAWAH BELAKANG
+        glVertex3d(-0.5, 0.5, 0.5); // ATAS BELAKANG
+        glVertex3d(-0.5, 0.5, -0.5); // ATAS DEPAN
     glEnd();
 
     // Right face
     glBegin(GL_QUADS);
         glNormal3f(1.0, 0.0, 0.0);
         glVertex3d(0.5, -0.5, -0.5); // BAWAH DEPAN
-        glVertex3d(0.5,  0.5, -0.5); // ATAS DEPAN
-        glVertex3d(0.5,  0.5,  0.5); // ATAS BELAKANG
-        glVertex3d(0.5, -0.5,  0.5); // BAWAH BELAKANG
+        glVertex3d(0.5, 0.5, -0.5); // ATAS DEPAN
+        glVertex3d(0.5, 0.5, 0.5); // ATAS BELAKANG
+        glVertex3d(0.5, -0.5, 0.5); // BAWAH BELAKANG
     glEnd();
 
     // Top face
     glBegin(GL_QUADS);
         glNormal3f(0.0, 1.0, 0.0);
-        glVertex3d(-0.5,  0.5, -0.5); // DEPAN KIRI
-        glVertex3d( 0.5,  0.5, -0.5); // DEPAN KANAN
-        glVertex3d( 0.5,  0.5,  0.5); // BELAKANG KANAN
-        glVertex3d(-0.5,  0.5,  0.5); // BELAKANG KIRI
+        glVertex3d(-0.5, 0.5, -0.5); // DEPAN KIRI
+        glVertex3d( 0.5, 0.5, -0.5); // DEPAN KANAN
+        glVertex3d( 0.5, 0.5, 0.5); // BELAKANG KANAN
+        glVertex3d(-0.5, 0.5, 0.5); // BELAKANG KIRI
     glEnd();
 
     // Bottom face
     glBegin(GL_QUADS);
         glNormal3f(0.0, -1.0, 0.0);
         glVertex3d(-0.5, -0.5, -0.5); // DEPAN KIRI
-        glVertex3d(-0.5, -0.5,  0.5); // BELAKANG KIRI
-        glVertex3d( 0.5, -0.5,  0.5); // BELAKANG KANAN
+        glVertex3d(-0.5, -0.5, 0.5); // BELAKANG KIRI
+        glVertex3d( 0.5, -0.5, 0.5); // BELAKANG KANAN
         glVertex3d( 0.5, -0.5, -0.5); // DEPAN KANAN
     glEnd();
     glPopMatrix();
@@ -113,7 +113,8 @@ void drawCandle(float x, float y, float z) {
     glPushMatrix();
     glTranslatef(x, y, z);
 
-    glColor3ub(255, 255, 255);  
+    glColor3ub(255, 255, 255);
+   
     // LILIN
     glPushMatrix();
         glRotatef(-90.0, 1.0, 0.0, 0.0);
@@ -124,10 +125,11 @@ void drawCandle(float x, float y, float z) {
 
     glColor3ub(255, 165, 0);  
     glPushMatrix();
-        glTranslatef(0.0, 0.5, 0.0); 
+   	glTranslatef(0.0, 0.5, 0.0); 
         
         // API
     glBegin(GL_TRIANGLES);
+    
         // Segitiga 1
         glNormal3f(0.0, 0.0, 1.0);
         glVertex3d(0.0, 0.3, 0.0); // Puncak di atas
@@ -137,20 +139,21 @@ void drawCandle(float x, float y, float z) {
         // Segitiga 2
         glNormal3f(0.0, 0.0, 1.0);
         glVertex3d(0.0, 0.3, 0.0); // Puncak di atas
-        glVertex3d(-0.1, 0.0,  0.1);
+        glVertex3d(-0.1, 0.0, 0.1);
         glVertex3d(-0.1, 0.0, -0.1);
 
         // Segitiga 3
         glNormal3f(0.0, 0.0, 1.0);
         glVertex3d(0.0, 0.3, 0.0); // Puncak di atas
-        glVertex3d( 0.1, 0.0,  0.1);
-        glVertex3d(-0.1, 0.0,  0.1);
+        glVertex3d( 0.1, 0.0, 0.1);
+        glVertex3d(-0.1, 0.0, 0.1);
 
         // Segitiga 4
         glNormal3f(0.0, 0.0, 1.0);
         glVertex3d(0.0, 0.3, 0.0); // Puncak di atas
         glVertex3d( 0.1, 0.0, -0.1);
-        glVertex3d( 0.1, 0.0,  0.1);
+        glVertex3d( 0.1, 0.0, 0.1);
+        
     glEnd();
 
     glPopMatrix();
@@ -159,27 +162,53 @@ void drawCandle(float x, float y, float z) {
 }
 
 void drawPlate(float x, float y, float z, float radius) {
-    GLUquadric *quadric = gluNewQuadric();  // Deklarasi dan inisialisasi quadric
+    GLUquadric *quadric = gluNewQuadric(); // Deklarasi dan inisialisasi quadric
     glPushMatrix();
     glTranslatef(x, y, z);
     glRotatef(-90.0, 1.0, 0.0, 0.0);
     glColor3f(1.0, 1.0, 1.0);
     
     // Silinder
-    gluCylinder(quadric, 5.0, 5.0, 0.1, 50, 50);
-
-    // Disk bawah
-    glPushMatrix();
-    glTranslatef(0.0, 0.0, -0.1); // Geser sedikit ke bawah
-    gluDisk(quadric, 0.0, 5.0, 50, 1); // Disk bawah
-    glPopMatrix();
+    gluCylinder(quadric, 5.0, 5.0, 0.1, 50, 1);
 
     // Disk atas
     glPushMatrix();
-    glTranslatef(0.0, 0.0, 0.1); // Geser sedikit ke atas
+    glTranslatef(0.0, 0.0, 0.1); 
     gluDisk(quadric, 0.0, 5.0, 50, 1); // Disk atas
     glPopMatrix();
 
+    // Disk bawah
+    glPushMatrix();
+    glTranslatef(0.0, 0.0, 0.0); 
+    gluDisk(quadric, 0.0, 5.0, 50, 1); // Disk bawah
+    glPopMatrix();
+
+    glPopMatrix();
+}
+
+void kaki(float x, float y, float z, float radius, float height, float r, float g, float b) {
+    glPushMatrix();
+    glTranslatef(x, y, z);
+    glColor3f(r, g, b);
+    GLUquadric *quadric = gluNewQuadric();
+
+    // Silinder (kaki meja)
+    glRotatef(-90.0, 1.0, 0.0, 0.0);
+    gluCylinder(quadric, radius, radius, height, 20, 20);
+
+    // Lingkaran bawah
+    glPushMatrix();
+    glTranslatef(0.0, 0.0, 0.0); 
+    gluDisk(quadric, 0.0, radius, 20, 1);
+    glPopMatrix();
+
+    // Lingkaran atas
+    glPushMatrix();
+    glTranslatef(0.0, 0.0, height); 
+    gluDisk(quadric, 0.0, radius, 20, 1);
+    glPopMatrix();
+
+    gluDeleteQuadric(quadric);
     glPopMatrix();
 }
 
@@ -187,50 +216,263 @@ void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
     gluLookAt(0.0, 5.0, 15.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-
-    // Terapkan skala
-    glTranslatef(0.0f, yPos, 0.0f);
-    glScalef(scale, scale, scale);
-
-    // ROTASI
-    glRotatef(angleX, 1.0, 0.0, 0.0); 
-    glRotatef(angleY, 0.0, 1.0, 0.0); 
+    glTranslatef(cameraX, cameraY, -cameraZ);
+    glRotatef(xPos, 1, 0, 0);
+    glRotatef(zPos, 0, 0, 1);
 
     if (hidden) {
         drawCartesius();
     }
 
-    drawPlate(0.0, 0.0, 0.0, 4.5);
+    glPushMatrix();
+    glRotatef(rotX, 1.0, 0.0, 0.0); 
+    glRotatef(rotY, 0.0, 1.0, 0.0); 
+    glTranslatef(0.0f, yPos, 0.0f);
+    glScalef(scale, scale, scale);
 
-    // KUE BAWAH
-    drawCube(0.0, 0.5, 0.0, //X,Y,Z
-             4.0, 1.0, 4.0, //L,T,DEPTH
-             1.0, 0.5, 0.5); //RGB
+    // Kue bawah
+    drawCube(0.0, 0.5, 0.0, 4.0, 1.0, 4.0, 1.0, 0.5, 0.5); 
     // KUE TENGAH
-    drawCube(0.0, 1.5, 0.0, 
-             3.0, 1.0, 3.0, 
-             1.0, 0.7, 0.5); 
+    drawCube(0.0, 1.5, 0.0, 3.0, 1.0, 3.0, 1.0, 0.7, 0.5);
     // KUE ATAS
-    drawCube(0.0, 2.5, 0.0, 
-             2.0, 1.0, 2.0, 
-             1.0, 0.9, 0.5); 
+    drawCube(0.0, 2.5, 0.0, 2.0, 1.0, 2.0, 1.0, 0.9, 0.5); 
 
     //LILIN
-    // Baris pertama
     drawCandle(-0.7, 3.0, 0.5); // Lilin kiri
     drawCandle( 0.0, 3.0, 0.5); // Lilin tengah
     drawCandle( 0.7, 3.0, 0.5); // Lilin kanan
 
-    // Baris kedua 
     drawCandle(-0.7, 3.0, -0.5); // Lilin kiri
     drawCandle( 0.0, 3.0, -0.5); // Lilin tengah
     drawCandle( 0.7, 3.0, -0.5); // Lilin kanan
 
+    //HIASAN TINGKAT 3
+    //PART1
+    //DEPAN
+    glPushMatrix();
+    glTranslatef(3.0, 3.0, 1.0);
+    glRotatef(90.0, 0.0, 0.0, 1.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 2.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    //BELAKANG
+    glPushMatrix();
+    glTranslatef(3.0, 3.0, -1.0);
+    glRotatef(90.0, 0.0, 0.0, 1.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 2.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    //KANAN
+    glPushMatrix();
+    glTranslatef(1.0, 3.0, -3.0);
+    glRotatef(90.0, 1.0, 0.0, 0.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 2.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    //KIRI
+    glPushMatrix();
+    glTranslatef(-1.0, 3.0, -3.0);
+    glRotatef(90.0, 1.0, 0.0, 0.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 2.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    
+    //PART2
+    //DEPAN
+    glPushMatrix();
+    glTranslatef(3.0, 2.5, 1.0);
+    glRotatef(90.0, 0.0, 0.0, 1.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 2.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    //BELAKANG
+    glPushMatrix();
+    glTranslatef(3.0, 2.5, -1.0);
+    glRotatef(90.0, 0.0, 0.0, 1.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 2.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    //KANAN
+    glPushMatrix();
+    glTranslatef(1.0, 2.5, -3.0);
+    glRotatef(90.0, 1.0, 0.0, 0.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 2.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+	//KIRI
+	glPushMatrix();
+    glTranslatef(-1.0, 2.5, -3.0);
+    glRotatef(90.0, 1.0, 0.0, 0.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 2.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    
+    //HIASAN TINGKAT 2
+    //PART1
+    //DEPAN
+    glPushMatrix();
+    glTranslatef(3.5, 2.0, 1.5);
+    glRotatef(90.0, 0.0, 0.0, 1.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 3.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    //BELAKANG
+    glPushMatrix();
+    glTranslatef(3.5, 2.0, -1.5);
+    glRotatef(90.0, 0.0, 0.0, 1.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 3.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    //KANAN
+    glPushMatrix();
+    glTranslatef(1.5, 2.0, -3.5);
+    glRotatef(90.0, 1.0, 0.0, 0.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 3.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    //KIRI
+    glPushMatrix();
+    glTranslatef(-1.5, 2.0, -3.5);
+    glRotatef(90.0, 1.0, 0.0, 0.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 3.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    
+    //PART2
+    //DEPAN BAWAH
+    glPushMatrix();
+    glTranslatef(3.5, 1.5, 1.5);
+    glRotatef(90.0, 0.0, 0.0, 1.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 3.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    //BELAKANG BAWAH
+    glPushMatrix();
+    glTranslatef(3.5, 1.5, -1.5);
+    glRotatef(90.0, 0.0, 0.0, 1.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 3.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    //KANAN BAWAH
+    glPushMatrix();
+    glTranslatef(1.5, 1.5, -3.5);
+    glRotatef(90.0, 1.0, 0.0, 0.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 3.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    //KIRI BAWAH
+    glPushMatrix();
+    glTranslatef(-1.5, 1.5, -3.5);
+    glRotatef(90.0, 1.0, 0.0, 0.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 3.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    
+    //HIASAN TINGKAT 1
+    //DEPAN
+    glPushMatrix();
+    glTranslatef(4.0, 1.0, 2.0);
+    glRotatef(90.0, 0.0, 0.0, 1.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 4.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    //BELAKANG
+    glPushMatrix();
+    glTranslatef(4.0, 1.0, -2.0);
+    glRotatef(90.0, 0.0, 0.0, 1.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 4.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    //KANAN
+    glPushMatrix();
+    glTranslatef(2.0, 1.0, -4.0);
+    glRotatef(90.0, 1.0, 0.0, 0.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 4.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    //KIRI
+    glPushMatrix();
+    glTranslatef(-2.0, 1.0, -4.0);
+    glRotatef(90.0, 1.0, 0.0, 0.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 4.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    
+    //PART2
+    //DEPAN
+    glPushMatrix();
+    glTranslatef(4.0, 0.5, 2.0);
+    glRotatef(90.0, 0.0, 0.0, 1.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 4.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    //BELAKANG
+    glPushMatrix();
+    glTranslatef(4.0, 0.5, -2.0);
+    glRotatef(90.0, 0.0, 0.0, 1.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 4.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    //KANAN
+    glPushMatrix();
+    glTranslatef(2.0, 0.5, -4.0);
+    glRotatef(90.0, 1.0, 0.0, 0.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 4.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    //KIRI
+    glPushMatrix();
+    glTranslatef(-2.0, 0.5, -4.0);
+    glRotatef(90.0, 1.0, 0.0, 0.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 4.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    
+    //PART3
+    //DEPAN
+    glPushMatrix();
+    glTranslatef(4.0, 0.0, 2.0);
+    glRotatef(90.0, 0.0, 0.0, 1.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 4.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    //BELAKANG
+    glPushMatrix();
+    glTranslatef(4.0, 0.0, -2.0);
+    glRotatef(90.0, 0.0, 0.0, 1.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 4.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    //KANAN
+    glPushMatrix();
+    glTranslatef(2.0, 0.0, -4.0);
+    glRotatef(90.0, 1.0, 0.0, 0.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 4.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    //KIRI
+    glPushMatrix();
+    glTranslatef(-2.0, 0.0, -4.0);
+    glRotatef(90.0, 1.0, 0.0, 0.0); // Rotasi kaki agar vertikal (opsional)
+    glColor3f(0.5, 0.3, 0.1); // Warna kaki
+    kaki(0.0, 2.0, 0.0, 0.1, 4.0, 0.5, 0.3, 0.1); // Gambar kaki (fungsi kustom)
+    glPopMatrix();
+    
+    
+    glPopMatrix();
 
+    //PIRING
+    drawPlate(0.0, -0.2, 0.0, 0.0);
+             
+    // KAKI MEJA
+    kaki(-3.0, -4.2, -3.0, 0.3, 4.0, 0.5, 0.3, 0.1);
+    kaki( 3.0, -4.2, -3.0, 0.3, 4.0, 0.5, 0.3, 0.1);
+    kaki(-3.0, -4.2, 3.0, 0.3, 4.0, 0.5, 0.3, 0.1);
+    kaki( 3.0, -4.2, 3.0, 0.3, 4.0, 0.5, 0.3, 0.1);
+	
 
     glutSwapBuffers();
 }
-
 
 void reshape(int w, int h) {
     glViewport(0, 0, w, h);
@@ -243,30 +485,52 @@ void reshape(int w, int h) {
 void keyboard(unsigned char key, int x, int y) {
     switch (key) {
         case 'a':
-            angleY -= 5.0; // ROTASI KE KIRI
+            rotY -= 5.0; // ROTASI KE KIRI
             break;
         case 'd':
-            angleY += 5.0; // ROTASI KE KANAN
+            rotY += 5.0; // ROTASI KE KANAN
             break;
         case 'h': 
-            hidden = !hidden;
+            hidden = !hidden; // HIDDEN KARTESIUS
             break;
         case '+': 
-            scale += 0.1;
+            scale += 0.1; // +++++
             break;
         case 'w' : 
-            yPos += 0.1;
+            yPos += 0.1; // TRANSLATTED ATAS
             break;
         case 's' :
-            yPos -= 0.1;
+            yPos -= 0.1; // TRANSLATED BAWAH
+            break;
+        case 'q':
+            xPos = xPos + 5; //ROTASI KE ATAS
+            if (xPos > 360)
+                xPos = 0;
+            break;
+        break;
+        case 'e':
+            xPos = xPos - 5; //ROTASI KEBAWAh
+            if (xPos > 360)
+                xPos = 0;
             break;
         case '-': 
-            scale -= 0.1;
+            scale -= 0.1; // ------
+            break;
+        case 'i': // Maju
+            cameraZ -= 0.5f;
+            break;
+        case 'k': // Mundur
+            cameraZ += 0.5f;
+            break;
+        case 'j': // Geser kiri
+            cameraX -= 0.5f;
+            break;
+        case 'l': // Geser kanan
+            cameraX += 0.5f;
             break;
     }
     glutPostRedisplay(); 
 }
-
 
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
