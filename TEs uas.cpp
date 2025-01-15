@@ -1,5 +1,4 @@
 #include <GL/glut.h>
-#include <cmath>
 
 // Variabel untuk rotasi
 float rotX = 0.0;
